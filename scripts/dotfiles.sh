@@ -2,7 +2,7 @@
 
 set -eu
 
-DOTFILES_REPO="git@github.com:PetyaBiszeps/dotfiles.git"
+DOTFILES_REPO="https://github.com/PetyaBiszeps/dotfiles.git"
 PROJECTS_DIR="$HOME/Documents/dev/os"
 DOTFILES_DIR="$PROJECTS_DIR/dotfiles"
 
