@@ -13,6 +13,12 @@ sh "$ARCH_DIR/scripts/packages.sh"
 echo "==> Creating user directories"
 sh "$ARCH_DIR/scripts/user-dirs.sh"
 
+echo "==> Preparing SSH / GitHub access"
+sh "$ARCH_DIR/scripts/ssh.sh"
+
+echo "==> Applying dotfiles"
+sh "$ARCH_DIR/scripts/dotfiles.sh"
+
 echo "==> Checking setup"
 sh "$ARCH_DIR/scripts/check.sh"
 

@@ -4,6 +4,7 @@ curl
 git
 zsh
 unzip
+openssh
 
 # Shell
 oh-my-posh
@@ -21,6 +22,7 @@ atuin
 zoxide
 direnv
 ripgrep
+github-cli
 bat-extras
 wl-clipboard
 tree-sitter-cli
