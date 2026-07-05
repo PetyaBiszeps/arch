@@ -4,7 +4,9 @@ set -eu
 
 SSH_DIR="$HOME/.ssh"
 SSH_KEY="$SSH_DIR/id_ed25519"
-SSH_KEY_TITLE="$(hostname)-arch"
+HOST_NAME="$(uname -n)"
+USER_NAME="$(id -un)"
+SSH_KEY_TITLE="$HOST_NAME-arch"
 
 echo "==> Preparing SSH"
 
@@ -13,7 +15,7 @@ chmod 700 "$SSH_DIR"
 
 if [ ! -f "$SSH_KEY" ]; then
   echo "==> Creating SSH key: $SSH_KEY"
-  ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "$(whoami)@$(hostname)"
+  ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "$USER_NAME@$HOST_NAME"
 else
   echo "SSH key already exists: $SSH_KEY"
 fi
