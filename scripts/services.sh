@@ -1,6 +1,6 @@
 echo "==> Checking Ly"
 
-if ! command -v ly >/dev/null 2>&1; then
+if ! yay -Q ly >/dev/null 2>&1; then
   echo "Missing ly. Make sure it is listed in packages.txt and installed."
   exit 1
 fi
