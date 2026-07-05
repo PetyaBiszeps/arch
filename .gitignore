@@ -1,0 +1,49 @@
+# Editor / IDE
+.idea/
+.vscode/
+
+# Tokens
+.ssh/
+.gnupg/
+
+# Local env
+.env
+.env.*
+!.env.example
+
+# Local files
+home/.config/git/user
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+
+# Misc
+*~
+*.tmp
+~.bak
+*.swp
+*.swo
+
+# OS
+._*
+.DS_Store
+
+# Generated files
+out/
+tmp/
+temp/
+dist/
+build/
+output/
+
+# Backup archives
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+*.rar

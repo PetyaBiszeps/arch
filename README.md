@@ -1,2 +1,4 @@
-# arch
-Arch Linux
+# Arch bootstrap
+```
+> I use Arch btw
+```
