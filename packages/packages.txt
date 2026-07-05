@@ -49,6 +49,7 @@ noctalia-git
 xwayland-satellite
 
 # XDG and utilities
+ly
 udiskie
 xdg-user-dirs
 xdg-desktop-portal
