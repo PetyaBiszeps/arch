@@ -6,7 +6,6 @@ SSH_DIR="$HOME/.ssh"
 SSH_KEY="$SSH_DIR/id_ed25519"
 HOST_NAME="$(uname -n)"
 USER_NAME="$(id -un)"
-SSH_KEY_TITLE="$HOST_NAME-arch"
 
 echo "==> Preparing SSH"
 
@@ -35,27 +34,10 @@ else
   echo "github.com is already in known_hosts"
 fi
 
-if ! command -v gh >/dev/null 2>&1; then
-  echo "Missing gh. Make sure github-cli is installed."
-  exit 1
-fi
-
-if ! gh auth status >/dev/null 2>&1; then
-  echo "==> GitHub authentication"
-  gh auth login
-else
-  echo "GitHub CLI is already authenticated"
-fi
-
-echo "==> Adding SSH key to GitHub"
-
-if gh ssh-key list | grep "$SSH_KEY_TITLE" >/dev/null 2>&1; then
-  echo "GitHub SSH key already exists with title: $SSH_KEY_TITLE"
-else
-  gh ssh-key add "$SSH_KEY.pub" --title "$SSH_KEY_TITLE"
-fi
-
-echo "==> SSH setup done"
+echo "==> SSH key setup done"
 echo
-echo "You can test manually with:"
-echo "  ssh -T git@github.com"
+echo "Public key:"
+echo "  $SSH_KEY.pub"
+echo
+echo "To print it:"
+echo "  cat $SSH_KEY.pub"
