@@ -1,0 +1,72 @@
+# Core
+base-devel
+curl
+git
+zsh
+unzip
+
+# Shell
+oh-my-posh
+zsh-autocomplete
+zsh-autosuggestions
+
+# CLI tools
+fd
+bat
+eza
+fzf
+yazi
+tmux
+atuin
+zoxide
+direnv
+ripgrep
+bat-extras
+wl-clipboard
+tree-sitter-cli
+
+# Editors
+neovim
+
+# Languages / runtimes
+php
+rust
+ruby
+julia
+jdk-openjdk
+npm
+
+# Package managers / language tooling
+mise
+composer
+luarocks
+
+# Wayland / Compositors / Desktop, session environments
+niri
+noctalia-git
+xwayland-satellite
+
+# XDG and utilities
+udiskie
+xdg-user-dirs
+xdg-desktop-portal
+xdg-desktop-portal-gtk
+xdg-desktop-portal-gnome
+
+# Desktop apps
+zed
+lact
+steam
+loupe
+ghostty
+spotify
+nautilus
+obsidian
+brave-bin
+celluloid
+vesktop-bin
+qbittorrent
+mission-center
+zen-browser-bin
+telegram-desktop
+gnome-calculator
