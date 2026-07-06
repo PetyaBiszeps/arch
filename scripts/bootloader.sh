@@ -20,12 +20,14 @@ set_grub_option() {
   fi
 }
 
-sign_if_exists() {
+sign_file() {
   file="$1"
 
   if [ -f "$file" ]; then
     echo "Signing: $file"
     sudo sbctl sign -s "$file"
+  else
+    echo "Skip missing file: $file"
   fi
 }
 
@@ -39,7 +41,7 @@ fi
 echo "==> Checking packages"
 
 for package in grub efibootmgr os-prober sbctl mokutil; do
-  if ! pacman -Q "$package" >/dev/null 2>&1; then
+  if ! yay -Q "$package" >/dev/null 2>&1; then
     echo "Missing package: $package"
     echo "Make sure it is listed in packages.txt and installed."
     exit 1
@@ -53,7 +55,7 @@ if [ ! -f "$THEME_SRC/theme.txt" ]; then
   exit 1
 fi
 
-echo "==> Checking sbctl"
+echo "==> Checking sbctl status"
 
 sudo sbctl status
 
@@ -83,18 +85,24 @@ echo "==> Generating GRUB config"
 
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-echo "==> Signing EFI files in /boot/EFI"
+echo "==> Signing known boot files"
 
-find /boot/EFI -type f -iname "*.efi" 2>/dev/null | while IFS= read -r file; do
-  sign_if_exists "$file"
-done
+sign_file "/boot/EFI/BOOT/BOOTX64.EFI"
+sign_file "/boot/EFI/GRUB/grubx64.efi"
+sign_file "/boot/grub/x86_64-efi/core.efi"
+sign_file "/boot/grub/x86_64-efi/grub.efi"
+sign_file "/boot/EFI/Linux/arch-linux.efi"
+sign_file "/boot/vmlinuz-linux"
 
-echo "==> Signing known GRUB/kernel files"
+echo "==> Signing EFI files from /boot/EFI"
 
-sign_if_exists "/boot/grub/x86_64-efi/core.efi"
-sign_if_exists "/boot/grub/x86_64-efi/grub.efi"
-sign_if_exists "/boot/vmlinuz-linux"
-sign_if_exists "/boot/EFI/Linux/arch-linux.efi"
+sudo find /boot/EFI \
+  -type f \
+  -iname "*.efi" \
+  ! -path "/boot/EFI/Microsoft/*" \
+  -print | while IFS= read -r file; do
+    sign_file "$file"
+  done
 
 echo "==> Verifying signatures"
 
@@ -105,6 +113,7 @@ echo "==> Current EFI boot entries"
 sudo efibootmgr -v
 
 echo "==> GRUB configured"
+echo
 echo "Reboot and test GRUB."
 echo
 echo "After boot, verify:"
