@@ -16,6 +16,9 @@ sh "$ARCH_DIR/scripts/user-dirs.sh"
 echo "==> Enabling services"
 sh "$ARCH_DIR/scripts/services.sh"
 
+echo "==> Configuring bootloader"
+sh "$ARCH_DIR/scripts/bootloader.sh"
+
 echo "==> Setting default shell"
 sh "$ARCH_DIR/scripts/shell.sh"
 
