@@ -20,6 +20,15 @@ set_grub_option() {
   fi
 }
 
+sign_if_exists() {
+  file="$1"
+
+  if [ -f "$file" ]; then
+    echo "Signing: $file"
+    sudo sbctl sign -s "$file"
+  fi
+}
+
 echo "==> Checking /boot"
 
 if ! findmnt /boot >/dev/null 2>&1; then
@@ -29,7 +38,7 @@ fi
 
 echo "==> Checking packages"
 
-for package in grub efibootmgr os-prober; do
+for package in grub efibootmgr os-prober sbctl mokutil; do
   if ! pacman -Q "$package" >/dev/null 2>&1; then
     echo "Missing package: $package"
     echo "Make sure it is listed in packages.txt and installed."
@@ -43,6 +52,10 @@ if [ ! -f "$THEME_SRC/theme.txt" ]; then
   echo "Missing theme file: $THEME_SRC/theme.txt"
   exit 1
 fi
+
+echo "==> Checking sbctl"
+
+sudo sbctl status
 
 echo "==> Installing GRUB theme"
 
@@ -70,35 +83,31 @@ echo "==> Generating GRUB config"
 
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-if command -v sbctl >/dev/null 2>&1; then
-  echo "==> Signing GRUB files with sbctl"
+echo "==> Signing EFI files in /boot/EFI"
 
-  if [ -f /boot/EFI/BOOT/BOOTX64.EFI ]; then
-    sudo sbctl sign -s /boot/EFI/BOOT/BOOTX64.EFI
-  fi
+find /boot/EFI -type f -iname "*.efi" 2>/dev/null | while IFS= read -r file; do
+  sign_if_exists "$file"
+done
 
-  if [ -f /boot/EFI/GRUB/grubx64.efi ]; then
-    sudo sbctl sign -s /boot/EFI/GRUB/grubx64.efi
-  fi
+echo "==> Signing known GRUB/kernel files"
 
-  if [ -f /boot/grub/x86_64-efi/core.efi ]; then
-    sudo sbctl sign -s /boot/grub/x86_64-efi/core.efi
-  fi
+sign_if_exists "/boot/grub/x86_64-efi/core.efi"
+sign_if_exists "/boot/grub/x86_64-efi/grub.efi"
+sign_if_exists "/boot/vmlinuz-linux"
+sign_if_exists "/boot/EFI/Linux/arch-linux.efi"
 
-  if [ -f /boot/grub/x86_64-efi/grub.efi ]; then
-    sudo sbctl sign -s /boot/grub/x86_64-efi/grub.efi
-  fi
+echo "==> Verifying signatures"
 
-  echo "==> Verifying signatures"
-  sudo sbctl verify
-else
-  echo "==> sbctl not found, skipping Secure Boot signing"
-fi
+sudo sbctl verify
+
+echo "==> Current EFI boot entries"
+
+sudo efibootmgr -v
 
 echo "==> GRUB configured"
-echo "Verify boot state with:"
+echo "Reboot and test GRUB."
+echo
+echo "After boot, verify:"
 echo "  mokutil --sb-state"
 echo "  sudo sbctl status"
 echo "  sudo sbctl verify"
-echo "Reboot and test GRUB."
-echo "If Secure Boot is enabled, verify it after boot with mokutil and sbctl."
