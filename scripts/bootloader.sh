@@ -62,11 +62,43 @@ sudo grub-install \
   --target=x86_64-efi \
   --efi-directory=/boot \
   --bootloader-id=GRUB \
-  --removable
+  --removable \
+  --modules="tpm" \
+  --disable-shim-lock
 
 echo "==> Generating GRUB config"
 
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
+if command -v sbctl >/dev/null 2>&1; then
+  echo "==> Signing GRUB files with sbctl"
+
+  if [ -f /boot/EFI/BOOT/BOOTX64.EFI ]; then
+    sudo sbctl sign -s /boot/EFI/BOOT/BOOTX64.EFI
+  fi
+
+  if [ -f /boot/EFI/GRUB/grubx64.efi ]; then
+    sudo sbctl sign -s /boot/EFI/GRUB/grubx64.efi
+  fi
+
+  if [ -f /boot/grub/x86_64-efi/core.efi ]; then
+    sudo sbctl sign -s /boot/grub/x86_64-efi/core.efi
+  fi
+
+  if [ -f /boot/grub/x86_64-efi/grub.efi ]; then
+    sudo sbctl sign -s /boot/grub/x86_64-efi/grub.efi
+  fi
+
+  echo "==> Verifying signatures"
+  sudo sbctl verify
+else
+  echo "==> sbctl not found, skipping Secure Boot signing"
+fi
+
 echo "==> GRUB configured"
-echo "Reboot and test with Secure Boot disabled."
+echo "Verify boot state with:"
+echo "  mokutil --sb-state"
+echo "  sudo sbctl status"
+echo "  sudo sbctl verify"
+echo "Reboot and test GRUB."
+echo "If Secure Boot is enabled, verify it after boot with mokutil and sbctl."

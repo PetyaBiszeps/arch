@@ -1,5 +1,6 @@
 # Core
 base-devel
+wget
 curl
 git
 zsh
@@ -9,6 +10,13 @@ openssh
 usbutils
 alsa-utils
 wireless-regdb
+
+# Bootloader / Secure Boot
+grub
+efibootmgr
+os-prober
+sbctl
+mokutil
 
 # Shell
 oh-my-posh
@@ -76,4 +84,3 @@ mission-center
 zen-browser-bin
 telegram-desktop
 gnome-calculator
-
