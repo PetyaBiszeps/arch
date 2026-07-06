@@ -24,7 +24,6 @@ direnv
 ripgrep
 github-cli
 bat-extras
-wl-clipboard
 tree-sitter-cli
 
 # Editors
