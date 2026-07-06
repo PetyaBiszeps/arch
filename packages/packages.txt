@@ -9,6 +9,7 @@ rtkit
 openssh
 usbutils
 alsa-utils
+linux-firmware
 wireless-regdb
 
 # Bootloader / Secure Boot
@@ -67,6 +68,18 @@ xdg-desktop-portal
 xdg-desktop-portal-gtk
 xdg-desktop-portal-gnome
 
+# Graphics / Gaming
+mesa
+lib32-mesa
+vulkan-radeon
+lib32-vulkan-radeon
+vulkan-tools
+mesa-utils
+gamemode
+lib32-gamemode
+mangohud
+lib32-mangohud
+
 # Desktop apps
 zed
 lact
@@ -84,3 +97,4 @@ mission-center
 zen-browser-bin
 telegram-desktop
 gnome-calculator
+
