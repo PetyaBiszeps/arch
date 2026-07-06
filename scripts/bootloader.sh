@@ -23,7 +23,7 @@ set_grub_option() {
 sign_file() {
   file="$1"
 
-  if [ -f "$file" ]; then
+  if sudo test -f "$file"; then
     echo "Signing: $file"
     sudo sbctl sign -s "$file"
   else
