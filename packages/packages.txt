@@ -4,7 +4,11 @@ curl
 git
 zsh
 unzip
+rtkit
 openssh
+usbutils
+alsa-utils
+wireless-regdb
 
 # Shell
 oh-my-posh
@@ -72,3 +76,4 @@ mission-center
 zen-browser-bin
 telegram-desktop
 gnome-calculator
+

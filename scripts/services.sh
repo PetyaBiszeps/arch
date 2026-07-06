@@ -1,3 +1,14 @@
+#!/usr/bin/env sh
+
+set -eu
+
+has_unit() {
+  unit="$1"
+
+  systemctl list-unit-files --type=service --no-legend "$unit" 2>/dev/null |
+    grep -q "^$unit"
+}
+
 echo "==> Checking Ly"
 
 if ! yay -Q ly >/dev/null 2>&1; then
@@ -15,11 +26,16 @@ fi
 
 echo "==> Enabling Ly"
 
-sudo systemctl disable gdm.service sddm.service lightdm.service lxdm.service 2>/dev/null || true
+sudo systemctl disable \
+  gdm.service \
+  sddm.service \
+  lightdm.service \
+  lxdm.service \
+  2>/dev/null || true
 
-if systemctl list-unit-files ly.service >/dev/null 2>&1; then
+if has_unit "ly.service"; then
   sudo systemctl enable ly.service
-elif systemctl list-unit-files 'ly@.service' >/dev/null 2>&1; then
+elif has_unit "ly@.service"; then
   sudo systemctl disable getty@tty2.service 2>/dev/null || true
   sudo systemctl enable ly@tty2.service
 else
@@ -27,4 +43,20 @@ else
   exit 1
 fi
 
-echo "Ly enabled. Reboot and select niri."
+echo "==> Enabling RTKit"
+
+if yay -Q rtkit >/dev/null 2>&1; then
+  sudo systemctl enable --now rtkit-daemon.service
+else
+  echo "Missing rtkit. Make sure it is listed in packages.txt and installed."
+  exit 1
+fi
+
+echo "==> Disabling initrd NetworkManager service if present"
+
+if has_unit "NetworkManager-initrd.service"; then
+  sudo systemctl disable --now NetworkManager-initrd.service 2>/dev/null || true
+fi
+
+echo "==> Services configured"
+echo "Reboot and select niri in Ly."

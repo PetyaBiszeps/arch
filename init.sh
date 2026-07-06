@@ -13,6 +13,9 @@ sh "$ARCH_DIR/scripts/packages.sh"
 echo "==> Creating user directories"
 sh "$ARCH_DIR/scripts/user-dirs.sh"
 
+echo "==> Enabling services"
+sh "$ARCH_DIR/scripts/services.sh"
+
 echo "==> Setting default shell"
 sh "$ARCH_DIR/scripts/shell.sh"
 
@@ -21,9 +24,6 @@ sh "$ARCH_DIR/scripts/ssh.sh"
 
 echo "==> Applying dotfiles"
 sh "$ARCH_DIR/scripts/dotfiles.sh"
-
-echo "==> Enabling services"
-sh "$ARCH_DIR/scripts/services.sh"
 
 echo "==> Checking setup"
 sh "$ARCH_DIR/scripts/check.sh"
