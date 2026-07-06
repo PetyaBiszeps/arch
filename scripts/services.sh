@@ -58,5 +58,19 @@ if has_unit "NetworkManager-initrd.service"; then
   sudo systemctl disable --now NetworkManager-initrd.service 2>/dev/null || true
 fi
 
+echo "==> Enabling LACT daemon"
+
+if yay -Q lact >/dev/null 2>&1; then
+  if has_unit "lactd.service"; then
+    sudo systemctl enable --now lactd.service
+  else
+    echo "Could not find lactd.service"
+    exit 1
+  fi
+else
+  echo "Missing lact. Make sure it is listed in packages.txt and installed."
+  exit 1
+fi
+
 echo "==> Services configured"
 echo "Reboot and select niri in Ly."
